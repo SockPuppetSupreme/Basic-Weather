@@ -19,7 +19,9 @@
 		<canvas></canvas>
 	</body>
 	
-	<script src="drawer.js"></script>
+	<script src="WeatherDrawer.js"></script>
+	<script src="ForegroundDrawer.js"></script>
+	<script src="BackgroundDrawer.js"></script>
 	<script>
 		
 		var canvas = document.querySelector('canvas');
@@ -36,7 +38,9 @@
         }
 		
 		function draw(){
-			draw(canvas);
+			drawBackground(canvas);
+			drawForeground(canvas);
+			drawWeather(canvas);
 		}
 		
 		update();

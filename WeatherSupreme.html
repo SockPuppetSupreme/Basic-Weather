@@ -1,0 +1,49 @@
+
+<html>
+	<!--
+	<meta http-equiv="refresh" content="5">
+	-->
+	<head>
+		<style>
+			body,html {
+			margin:0;
+			padding:0;
+			}
+			canvas {
+                background-color: #311440;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<canvas></canvas>
+	</body>
+	
+	<script src="drawer.js"></script>
+	<script>
+		
+		var canvas = document.querySelector('canvas');
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		
+		function update(){
+			if(canvas.width != window.innerWidth || canvas.height != window.innerHeight){
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+			}
+			
+            draw();
+        }
+		
+		function draw(){
+			draw(canvas);
+		}
+		
+		update();
+		setInterval ( update, 100 );
+	
+	</script>
+	
+	
+	
+<html>

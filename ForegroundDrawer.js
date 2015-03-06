@@ -3,7 +3,7 @@
 var canvas;
 var ctx;
 
-function drawForeground(canvasArg){
+function drawForeground(canvasArg,weather){
 	
 	canvas = canvasArg;
 	ctx = canvas.getContext('2d');

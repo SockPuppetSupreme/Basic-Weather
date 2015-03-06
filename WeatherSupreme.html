@@ -19,10 +19,19 @@
 		<canvas></canvas>
 	</body>
 	
+	<script src="WeatherGrabber.js"></script>
 	<script src="WeatherDrawer.js"></script>
 	<script src="ForegroundDrawer.js"></script>
 	<script src="BackgroundDrawer.js"></script>
 	<script>
+		
+		weather = new Weather();
+		
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition,showError);
+		} else {
+			alert("failed to grab geolocation");
+		}
 		
 		var canvas = document.querySelector('canvas');
 		canvas.width = window.innerWidth;
@@ -38,13 +47,37 @@
         }
 		
 		function draw(){
-			drawBackground(canvas);
-			drawForeground(canvas);
-			drawWeather(canvas);
+			drawBackground(canvas,weather);
+			drawForeground(canvas,weather);
+			drawWeather(canvas,weather);
 		}
 		
 		update();
 		setInterval ( update, 100 );
+		
+		function showPosition(position) {
+			
+			weather = grabWeatherConditions(position.coords.latitude,position.coords.longitude)
+		}
+
+		function showError(error) {
+			var errorString;
+			switch(error.code) {
+				case error.PERMISSION_DENIED:
+					errorString = "User denied the request for Geolocation."
+					break;
+				case error.POSITION_UNAVAILABLE:
+					errorString = "Location information is unavailable."
+					break;
+				case error.TIMEOUT:
+					errorString = "The request to get user location timed out."
+					break;
+				case error.UNKNOWN_ERROR:
+					errorString = "An unknown error occurred."
+					break;
+			}
+			console.log(errorString);
+		}
 	
 	</script>
 	

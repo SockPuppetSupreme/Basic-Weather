@@ -1,43 +1,35 @@
 
+//a generic weather object for rest of drawers to use.
 function Weather(){
 	
-	this.inOneWord = "Sunny";
+	this.json;
+	
+	this.inOneWord = "NONE";
 	
 }
 
-function grabWeatherConditions(lat,longit){
+
+var grabberWeather;
+
+function grabWeatherConditions(lat,lon){
 	
-	//get weather info though
-	var link = "forecast.weather.gov/MapClick.php?lat="+lat+"&lon="+longit+"&FcstType=jsonp";
-	var info = getJSON(link);
+	//creating new weather object for returning after this is all finnished up
+	grabberWeather = new Weather();
 	
-	console.log(link+" , "+info);
+	//grabs weather info using JSONP which walls WeatherData, which modifies global grabberWeather
+	$.getScript("http://forecast.weather.gov/MapClick.php?lat="+lat+"&lon="+lon+"&FcstType=json&callback=WeatherData");
 	
-	weather = new Weather();
-	weather.inOneWord = "Rainy";
-	
-	return weather;
+	//returns weather grabber after being modified, or not
+	return grabberWeather;
 }
 
-function getJSON(link){
+//takes in JSON data that has been formatted according to forecast.weather 
+function WeatherData(data) {
 	
-	var grabbedJason = "";
+	console.log(data.currentobservation.Weather); 
 	
-	$(document).ready(function(){
-				
-		$("#tempAjaxStorage").load(link, function(response, status, xhr){
-				if (status == "success"){
-					
-				} else {
-					$("#tempAjaxStorage").html("An error occured: <br>" + xhr.status + " " + xhr.statusText+"</br> This could have occured from you the browser being IE or some anti virus protection"+
-					"</br>Come on now we're not going to hurt you..")
-				}
-		});
-		//$("#tempAjaxStorage").html("shit");		
-				
-	});
+	grabberWeather.json = data;
+	grabberWeather.inOneWord = data.currentobservation.Weather;
 	
-	grabbedJason = document.getElementById("tempAjaxStorage").innerHTML;
 	
-	return grabbedJason;
 }

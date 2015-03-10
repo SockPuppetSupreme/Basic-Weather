@@ -1,91 +1,93 @@
 
 <html>
-	<!--
-	<meta http-equiv="refresh" content="5">
-	-->
-	<head>
-		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-		<meta content="utf-8" http-equiv="encoding">
-	
-		<style>
-			body,html {
-			margin:0;
-			padding:0;
-			}
-			canvas {
+    <!--
+    <meta http-equiv="refresh" content="5">
+    -->
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+    
+        <style>
+            body,html {
+            margin:0;
+            padding:0;
+            }
+            canvas {
                 background-color: #311440;
-			}
-		</style>
-	</head>
-	
-	<body>
-		<canvas></canvas>
-	</body>
-		
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="WeatherGrabber.js"></script>
-	<script src="WeatherDrawer.js"></script>
-	<script src="ForegroundDrawer.js"></script>
-	<script src="BackgroundDrawer.js"></script>
-	
-	<script>
-		
-		weather = new Weather();
-		
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(showPosition,showError);
-		} else {
-			alert("failed to grab geolocation");
-		}
-		
-		var canvas = document.querySelector('canvas');
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		
-		function update(){
-			if(canvas.width != window.innerWidth || canvas.height != window.innerHeight){
-				canvas.width = window.innerWidth;
-				canvas.height = window.innerHeight;
-			}
-			
+            }
+        </style>
+    </head>
+    
+    <body>
+        <canvas></canvas>
+    </body>
+        
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="Objects.js"></script>
+    <script src="WeatherGrabber.js"></script>
+    <script src="WeatherDrawer.js"></script>
+    <script src="ForegroundDrawer.js"></script>
+    <script src="BackgroundDrawer.js"></script>
+    
+    <script>
+        
+        weather = new Weather();
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition,showError);
+        } else {
+            alert("failed to grab geolocation");
+        }
+        
+        var canvas = document.querySelector('canvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        function update(){
+            if(canvas.width != window.innerWidth || canvas.height != window.innerHeight){
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
             draw();
         }
-		
-		function draw(){
-			drawBackground(canvas,weather);
-			drawForeground(canvas,weather);
-			drawWeather(canvas,weather);
-		}
-		
-		update();
-		setInterval ( update, 100 );
-		
-		function showPosition(position) {
-			
-			weather = grabWeatherConditions(position.coords.latitude,position.coords.longitude)
-		}
+        
+        function draw(){
+            drawBackground(canvas,weather);
+            drawForeground(canvas,weather);
+            drawWeather(canvas,weather);
+        }
+        
+		//consider using onwindowstart or something
+        update();
+        setInterval ( update, 100 );
+        
+        function showPosition(position) {
+            
+            weather = grabWeatherConditions(position.coords.latitude,position.coords.longitude)
+        }
 
-		function showError(error) {
-			var errorString;
-			switch(error.code) {
-				case error.PERMISSION_DENIED:
-					errorString = "User denied the request for Geolocation."
-					break;
-				case error.POSITION_UNAVAILABLE:
-					errorString = "Location information is unavailable."
-					break;
-				case error.TIMEOUT:
-					errorString = "The request to get user location timed out."
-					break;
-				case error.UNKNOWN_ERROR:
-					errorString = "An unknown error occurred."
-					break;
-			}
-			console.log(errorString);
-		}
-	
-	</script>
-	
-	
-	
+        function showError(error) {
+            var errorString;
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorString = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorString = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    errorString = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorString = "An unknown error occurred."
+                    break;
+            }
+            console.log(errorString);
+        }
+    
+    </script>
+    
+    
+    
 <html>

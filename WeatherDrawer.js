@@ -32,7 +32,8 @@ function CloudPoint(startX,startY,midX,midY,endX,endY){
 
 function Cloud(startX, startY, width, height){
 	
-	this.velocity = 1;
+	this.velocity = 5;//pixels per second
+	this.time = Date.now();
 	
 	this.startDrawingPoint = new Vector2();
 	this.points = [];
@@ -65,14 +66,19 @@ function Cloud(startX, startY, width, height){
 	
 	this.update = function(){
 		
+		var movement = (Date.now() - this.time)/1000;
+		movement *= this.velocity;
+		
 		//moving the clouds cord along the x axis to make them appear to be moving.
 		for(var i = 0; i < this.points.length; i ++){
-			this.startX += this.velocity;
-			this.points[i].startX += this.velocity;
-			this.points[i].midX += this.velocity;
-			this.points[i].endX += this.velocity;
+			this.startX += movement;
+			this.points[i].startX += movement;
+			this.points[i].midX += movement;
+			this.points[i].endX += movement;
 		}
-	
+		this.startDrawingPoint.x += movement;
+		
+		this.time = Date.now();
 	}
 	
 	//got to create the points in the right order for drawing the cloud. Run
@@ -90,7 +96,7 @@ function Cloud(startX, startY, width, height){
 		//y = sqrt( ( 1 - (x^2/a^2) )b^2 )
 		
 		//go through and build a list of points going around an eclipse
-		var numOfPoints = 4+Math.floor((Math.random() *5) )// this is doubled when going through.
+		var numOfPoints = 5+Math.floor((Math.random() *5) )// this is doubled when going through.
 		var pointsAlongElipse = [];
 		var pointsToAddInReverse = []
 		for(var i = 0; i < numOfPoints; i ++){
@@ -140,16 +146,7 @@ function Cloud(startX, startY, width, height){
 															pointsAlongElipse[i+1].x+xDirection,pointsAlongElipse[i].y+yDirection, 
 															pointsAlongElipse[i+1].x, pointsAlongElipse[i+1].y );
 		}
-		/*
-		var xDirection = ((pointsAlongElipse[pointsAlongElipse.length-1].x)/(startX+width))*50;
-		if(pointsAlongElipse[pointsAlongElipse.length-1].x < startX+(width/2)){
-			xDirection *= -1;
-		}
-		var yDirection = ((pointsAlongElipse[pointsAlongElipse.length-1].y)/(startY+height))*-50;
-		if(pointsAlongElipse[pointsAlongElipse.length-1].y > startY+(height/2)){
-			yDirection *= -1;
-		}
-		*/
+
 		var xDirection = 0;
 		var pnt = pointsAlongElipse[pointsAlongElipse.length-1].x - startX;
 		if(pnt > width/2){ 

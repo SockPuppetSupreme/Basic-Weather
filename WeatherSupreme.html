@@ -32,6 +32,7 @@
     <script>
         
         weather = new Weather();
+		var date = new Date();
         
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition,showError);
@@ -56,16 +57,42 @@
             drawBackground(canvas,weather);
             drawForeground(canvas,weather);
             drawWeather(canvas,weather);
+			drawWeatherInformation();
         }
         
 		//consider using onwindowstart or something
         update();
-        setInterval ( update, 100 );
+        setInterval ( update, 32 );//~30fps if my math is right
         
         function showPosition(position) {
             
             weather = grabWeatherConditions(position.coords.latitude,position.coords.longitude)
         }
+		
+		
+		function drawWeatherInformation(){
+			//ctx = canvas.getContext('2d');
+			ctx.beginPath();
+			ctx.rect(20,canvas.height-120,200,100);
+			ctx.fillStyle = 'Black';
+			ctx.fill();
+			
+			ctx.beginPath();
+			ctx.rect(25,canvas.height-115,190,90);
+			ctx.fillStyle = 'White';
+			ctx.fill();
+			
+			//render text
+			ctx.beginPath();
+			ctx.fillStyle = 'black';
+			ctx.font = "12px Georgia";
+			ctx.fillText(date.getHours()+":"+date.getMinutes(),30,canvas.height-100);
+			ctx.fillText(weather.location,30,canvas.height-85);
+			ctx.fillText(weather.location,30,canvas.height-85);
+			ctx.fillText(weather.inOneWord,30,canvas.height-70);
+			ctx.fillText(weather.curTemp+" F",30,canvas.height-55);
+			ctx.fillText(weather.windSpeed+" mph winds",30,canvas.height-40);
+		}
 
         function showError(error) {
             var errorString;

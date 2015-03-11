@@ -4,7 +4,15 @@ function Weather(){
 	
 	this.json;
 	
-	this.inOneWord = "NONE";
+	this.inOneWord = "None";
+	
+	this.curTemp = 0;
+	
+	this.windSpeed = 0;
+	
+	this.location = "Not found";
+	
+	this.caseForRendering = "Clear";
 	
 }
 
@@ -13,7 +21,9 @@ var grabberWeather;
 
 function grabWeatherConditions(lat,lon){
 	
-	//creating new weather object for returning after this is all finnished up
+	console.log(lat+","+lon)
+	
+	//creating new weather object for returning after this is all finished up
 	grabberWeather = new Weather();
 	
 	//grabs weather info using JSONP which walls WeatherData, which modifies global grabberWeather
@@ -28,8 +38,14 @@ function WeatherData(data) {
 	
 	console.log(data.currentobservation.Weather); 
 	
+	//loading in info from the file
 	grabberWeather.json = data;
 	grabberWeather.inOneWord = data.currentobservation.Weather;
+	grabberWeather.curTemp = data.currentobservation.Temp;
+	grabberWeather.windSpeed = data.currentobservation.Winds;
+	grabberWeather.location = data.location.areaDescription;
 	
+	//determine case for rendering../
+	//fair/clear, cloudy/clouds, overcast, snow, fog
 	
 }

@@ -2,6 +2,7 @@
 
 var canvas;
 var sky;
+var ground;
 
 function drawBackground(canvasArg,weather){
 	

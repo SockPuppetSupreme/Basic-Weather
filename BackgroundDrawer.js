@@ -2,10 +2,11 @@
 
 var canvas;
 var sky;
+var ground;
 
 function drawBackground(canvasArg,weather){
 	
-	canvas = canvasArg;
+    canvas = canvasArg;
 	sky = canvas.getContext('2d');
 	
 	sky.rect(0,0,canvas.width,canvas.height);

@@ -34,11 +34,13 @@
         weather = new Weather();
 		var date = new Date();
         
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        } else {
-            alert("failed to grab geolocation");
-        }
+		function tryGrabbingWeatherInfo(){
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition,showError);
+			} else {
+				console.log("failed to grab geolocation");
+			}
+		}
         
         var canvas = document.querySelector('canvas');
         canvas.width = window.innerWidth;
@@ -63,6 +65,7 @@
 		//consider using onwindowstart or something
         update();
         setInterval ( update, 32 );//~30fps if my math is right
+		setInterval ( tryGrabbingWeatherInfo, 30000 );//attempt grabbing weather conditions every 30 seconds
         
         function showPosition(position) {
             
@@ -71,7 +74,9 @@
 		
 		
 		function drawWeatherInformation(){
-			//ctx = canvas.getContext('2d');
+			
+			date = new Date();
+			
 			ctx.beginPath();
 			ctx.rect(20,canvas.height-120,200,100);
 			ctx.fillStyle = 'Black';

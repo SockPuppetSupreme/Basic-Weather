@@ -1,15 +1,19 @@
 
 
 var canvas;
-var ctx;
+var sky;
 
 function drawBackground(canvasArg,weather){
 	
 	canvas = canvasArg;
-	ctx = canvas.getContext('2d');
+	sky = canvas.getContext('2d');
 	
-	ctx.rect(0,0,canvas.width,canvas.height);
-	ctx.fillStyle = '#94DBFF';
-	ctx.fill();
+	sky.rect(0,0,canvas.width,canvas.height);
+	sky.fillStyle = '#94DBFF';
+	sky.fill();
 	
+    ground = canvas.getContext('2d')
+    ground.rect(0, 0, canvas.width, 60px)
+    ground.fillStyle = 'green'
+    ground.fill()
 }

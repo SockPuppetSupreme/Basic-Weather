@@ -13,6 +13,10 @@ function Weather(){
 	this.location = "Not found";
 	
 	this.caseForRendering = "Clear";
+    
+    this.lat = 10000;
+    
+    this.lon = 10000;
 	
 }
 
@@ -25,6 +29,9 @@ function grabWeatherConditions(lat,lon){
 	
 	//creating new weather object for returning after this is all finished up
 	grabberWeather = new Weather();
+    
+    grabberWeather.lat = lat;
+    grabberWeather.lon = lon;
 	
 	//grabs weather info using JSONP which walls WeatherData, which modifies global grabberWeather
 	$.getScript("http://forecast.weather.gov/MapClick.php?lat="+lat+"&lon="+lon+"&FcstType=json&callback=WeatherData");

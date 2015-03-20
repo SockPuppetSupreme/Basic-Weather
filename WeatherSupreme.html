@@ -19,10 +19,16 @@
     </head>
     
     <body>
+        
+        <input type="range" id="sliderTime" value="90"><div id="hour" style="display: inline">0</div>
         <canvas></canvas>
+        
     </body>
         
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src = "https://rawgit.com/noeldelgado/Values.js/master/index.js"></script>
+    <script src="https://rawgit.com/mourner/suncalc/master/suncalc.js"></script>
+    <script src="LightCalculator.js"></script>
 	<script src="Objects.js"></script>
     <script src="WeatherGrabber.js"></script>
     <script src="WeatherDrawer.js"></script>
@@ -67,7 +73,7 @@
 		//consider using onwindowstart or something
         update();
         setInterval ( update, 32 );//~30fps if my math is right
-		setInterval ( tryGrabbingWeatherInfo, 30000 );//attempt grabbing weather conditions every 30 seconds
+		setInterval ( tryGrabbingWeatherInfo, 120000 );//attempt grabbing weather conditions every 2 minutes
         
         function showPosition(position) {
             

@@ -14,8 +14,10 @@ function drawWeather(canvasArg,weather){
 		clouds[2] = new Cloud(600,230,600,100);
 	}
 	
+    var determineLighting = 100;// 100 means fully lit, 0 means completely dark
+    
 	for(var i = 0; i < clouds.length; i ++){
-		clouds[i].draw();
+		clouds[i].draw(determineLighting);
 		clouds[i].update();
 	}
 
@@ -44,7 +46,7 @@ function Cloud(startX, startY, width, height){
 	this.height = height;
 	
 	//much thanks to http://www.html5canvastutorials.com/tutorials/html5-canvas-shape-fill/ for examples of the curve.
-	this.draw = function(){
+	this.draw = function(lighting){
 		
 		// begin custom shape
 		ctx = canvas.getContext('2d');
@@ -54,12 +56,19 @@ function Cloud(startX, startY, width, height){
 			ctx.bezierCurveTo(this.points[i].startX, this.points[i].startY, this.points[i].midX, this.points[i].midY, this.points[i].endX, this.points[i].endY);
 		}
 
+        
+        var cloudColor = new Values('#FFFFFF');
+        cloudColor = cloudColor.shade(101-getLighting(weather));
+        
+        var cloudOutline = new Values('#8ED6FF');
+        cloudOutline = cloudOutline.shade(101-getLighting(weather));
+        
 		// complete custom shape
 		ctx.closePath();
 		ctx.lineWidth = 3;
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = '#'+cloudColor.hex;
 		ctx.fill();
-		ctx.strokeStyle = '#8ED6FF';
+		ctx.strokeStyle = '#'+cloudOutline.hex;
 		ctx.stroke();
 		
 	}

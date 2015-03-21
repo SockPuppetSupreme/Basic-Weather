@@ -61,7 +61,7 @@ function Cloud(startX, startY, width, height){
         cloudColor = cloudColor.shade(101-getLighting(weather));
         
         var cloudOutline = new Values('#8ED6FF');
-        cloudOutline = cloudOutline.shade(101-getLighting(weather));
+        cloudOutline = cloudOutline.shade(111-getLighting(weather));
         
 		// complete custom shape
 		ctx.closePath();

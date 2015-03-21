@@ -20,7 +20,15 @@
     
     <body>
         
-        <input type="range" id="sliderTime" value="90"><div id="hour" style="display: inline">0</div>
+        <!-- user input for debugging lighting -->
+        <input type="range" id="sliderTime" value="50"><div id="hour" style="display: inline">0</div>
+        <input type="radio" name="curDebugWeather" id = "curDebugWeatherClear" value="Clear">Clear
+        <input type="radio" name="curDebugWeather" id = "curDebugWeatherClouds" value="Clouds">Clouds
+        <input type="radio" name="curDebugWeather" id = "curDebugWeatherOvercast" value="Overcast">Overcast
+        <input type="radio" name="curDebugWeather" id = "curDebugWeatherFog" value="Fog">Fog
+        <input type="radio" name="curDebugWeather" id = "curDebugWeatherRain" value="Rain">Rain
+        <input type="radio" name="curDebugWeather" id = "curDebugWeatherThunderstorm" value="Thunderstorm">Thunderstorm
+        
         <canvas></canvas>
         
     </body>

@@ -7,19 +7,7 @@ function getLighting(weather){
     
     var currentLighting = 100;
     
-    if( weather.cascaseForRendering == "Clear" ){
-        //let's keep it at 100 I guess
-    } else if ( weather.cascaseForRendering == "Clouds" ){
-        currentLighting -= 15;
-    } else if ( weather.cascaseForRendering == "Overcast" ){
-        currentLighting -=25;
-    } else if ( weather.cascaseForRendering == "Fog" ){
-        currentLighting -= 30;
-    } else if ( weather.cascaseForRendering == "Rain" ){
-        currentLighting -= 40;
-    } else if ( weather.cascaseForRendering == "Thunderstorm" ){
-        currentLighting -= 50;
-    }
+
     
     var sliderValue = document.getElementById("sliderTime").value;
     var time = (sliderValue*24)/100;
@@ -47,7 +35,41 @@ function getLighting(weather){
     //output
     document.getElementById("hour").innerHTML = time+ " daylight: "+dayLight+", time should start:~"+timeToStart;
     
-    currentLighting = Math.max(Math.min(currentLighting,100), 20);
+    //making darker based on weather conditions
+    /*
+    if( weather.cascaseForRendering == "Clear" ){
+        //let's keep it at 100 I guess
+    } else if ( weather.cascaseForRendering == "Clouds" ){
+        currentLighting -= 15;
+    } else if ( weather.cascaseForRendering == "Overcast" ){
+        currentLighting -=25;
+    } else if ( weather.cascaseForRendering == "Fog" ){
+        currentLighting -= 30;
+    } else if ( weather.cascaseForRendering == "Rain" ){
+        currentLighting -= 40;
+    } else if ( weather.cascaseForRendering == "Thunderstorm" ){
+        currentLighting -= 50;
+    }
+    */
+    
+    currentLighting = Math.min(currentLighting,100)
+    
+    if( document.getElementById('curDebugWeatherClear').checked){
+        //let's keep it at 100 I guess
+        console.log("Clear");
+    } else if ( document.getElementById('curDebugWeatherClouds').checked ){
+        currentLighting -= 15;
+    } else if ( document.getElementById('curDebugWeatherOvercast').checked ){
+        currentLighting -=25;
+    } else if ( document.getElementById('curDebugWeatherFog').checked ){
+        currentLighting -= 35;
+    } else if ( document.getElementById('curDebugWeatherRain').checked ){
+        currentLighting -= 30;
+    } else if (document.getElementById('curDebugWeatherThunderstorm').checked ){
+        currentLighting -= 40;
+    }
+    
+    currentLighting = Math.max(currentLighting, 20);
     
     return currentLighting;
     

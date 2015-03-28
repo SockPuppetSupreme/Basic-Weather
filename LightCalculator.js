@@ -56,7 +56,6 @@ function getLighting(weather){
     
     if( document.getElementById('curDebugWeatherClear').checked){
         //let's keep it at 100 I guess
-        console.log("Clear");
     } else if ( document.getElementById('curDebugWeatherClouds').checked ){
         currentLighting -= 15;
     } else if ( document.getElementById('curDebugWeatherOvercast').checked ){
@@ -65,6 +64,8 @@ function getLighting(weather){
         currentLighting -= 35;
     } else if ( document.getElementById('curDebugWeatherRain').checked ){
         currentLighting -= 30;
+     } else if ( document.getElementById('curDebugWeatherSnow').checked ){
+        currentLighting -= 25;
     } else if (document.getElementById('curDebugWeatherThunderstorm').checked ){
         currentLighting -= 40;
     }

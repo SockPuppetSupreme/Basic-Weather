@@ -1,0 +1,20 @@
+#infobox {
+    width: 25%
+    height: 100%
+    min-height: 6.5em
+    margin: 10%
+    
+    background-color: #F6E
+    color: white
+    
+    border-radius: 0.75em
+    padding: 10%
+    
+    -webkit-transform: translate(0px, 0px)
+    transform: translate(0px, 0px)
+}
+
+#infobox::before {
+    content: "#" attr(id)
+    font-weight: bold
+}

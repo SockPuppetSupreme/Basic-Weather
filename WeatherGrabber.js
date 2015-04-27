@@ -14,9 +14,9 @@ function Weather(){
 	
 	this.caseForRendering = "Clear";
     
-    this.lat = 10000;
+    this.lat = 33.524755;
     
-    this.lon = 10000;
+    this.lon = 86.812740;
 	
 }
 
@@ -83,4 +83,8 @@ function WeatherData(data) {
 	if(grabberWeather.inOneWord.indexOf("Thunderstorm") > -1){
 		grabberWeather.caseForRendering = "Thunderstorm";
 	}
+    
+    
+    
+    
 }

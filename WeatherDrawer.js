@@ -2,16 +2,16 @@
 var canvas;
 var ctx;
 
-function drawWeather(canvasArg,weather){
+function drawWeather(canvasArg,weatherArg){
 	
 	canvas = canvasArg;
 	ctx = canvas.getContext('2d');
 
     
-    
-    if( document.getElementById('curDebugWeatherClear').checked){
+    /*
+    if(weather.cascaseForRendering == "Clear"){
         cloudSpawnUpdate("Clear");
-    } else if ( document.getElementById('curDebugWeatherClouds').checked ){
+    } else if ( weather.cascaseForRendering == "Clouds" ){
         cloudSpawnUpdate("Clouds");
     } else if ( document.getElementById('curDebugWeatherOvercast').checked ){
         cloudSpawnUpdate("Overcast");
@@ -23,14 +23,16 @@ function drawWeather(canvasArg,weather){
         cloudSpawnUpdate("Snow");
     } else if (document.getElementById('curDebugWeatherThunderstorm').checked ){
         cloudSpawnUpdate("Thunderstorm");
+    }*/
+    if(weatherArg != null){
+        cloudSpawnUpdate(weatherArg.caseForRendering);
     }
-        
 }
 
 
 var clouds = [];
-var lastFramesWeather = "Clouds";
-function cloudSpawnUpdate(thisFramesWeather){
+var weatherDrawerlastFramesWeather = "Clouds";
+function cloudSpawnUpdate(thisFramesWeatherCloudSpawnArg){
     
     //initialize clouds, this is just a cute bunch
     /*
@@ -42,9 +44,15 @@ function cloudSpawnUpdate(thisFramesWeather){
     */
     
     //delete clouds if we've changed weather conditions
-    if(lastFramesWeather !== thisFramesWeather){
+    if(weatherDrawerlastFramesWeather !== thisFramesWeatherCloudSpawnArg){
         clouds = [];
+        console.log(weatherDrawerlastFramesWeather +" != "+thisFramesWeatherCloudSpawnArg);
     }
+    
+    //console.log("last frames weather: "+weatherDrawerlastFramesWeather);
+    //console.log("this frames weather: "+thisFramesWeatherCloudSpawnArg);
+    
+    weatherDrawerlastFramesWeather = thisFramesWeatherCloudSpawnArg;
     
     
     //size of the clouds should be determined based on the weather. clouds
@@ -57,58 +65,58 @@ function cloudSpawnUpdate(thisFramesWeather){
     var percipitationMagnitude = 0;
     var adjustedLightingForClouds = 0;
         
-    if(thisFramesWeather === "Clear"){
+    if(thisFramesWeatherCloudSpawnArg === "Clear"){
         
         widthOfClouds = window.innerWidth/5;
         heightOfClouds = widthOfClouds/5;
         averageDistanceBetweenClouds = heightOfClouds*4;
         averageStartingHeight = heightOfClouds;
         
-    }else if(thisFramesWeather === "Clouds"){
+    }else if(thisFramesWeatherCloudSpawnArg === "Clouds"){
     
         widthOfClouds = window.innerWidth/2;
         heightOfClouds = widthOfClouds/5;
         averageDistanceBetweenClouds = heightOfClouds;
 
-    }else if(thisFramesWeather === "Overcast"){
+    }else if(thisFramesWeatherCloudSpawnArg === "Overcast"){
     
         widthOfClouds = window.innerWidth/2;
         heightOfClouds = widthOfClouds/5;
         averageDistanceBetweenClouds = -heightOfClouds;
         averageStartingHeight = -heightOfClouds/1.5;
     
-    }else if(thisFramesWeather === "Fog"){
+    }else if(thisFramesWeatherCloudSpawnArg === "Fog"){
        
         widthOfClouds = window.innerWidth/2;
         heightOfClouds = widthOfClouds/5;
         averageDistanceBetweenClouds = 0;
     
-    }else if(thisFramesWeather === "Rain"){
+    }else if(thisFramesWeatherCloudSpawnArg === "Rain"){
        
         widthOfClouds = window.innerWidth/2;
         heightOfClouds = widthOfClouds/5;
         averageDistanceBetweenClouds = -heightOfClouds;
         averageStartingHeight = -heightOfClouds/1.5;
-        percipitation = thisFramesWeather;
+        percipitation = thisFramesWeatherCloudSpawnArg;
         adjustedLightingForClouds = -10;
         percipitationMagnitude = .7;
     
-    }else if(thisFramesWeather === "Snow"){
+    }else if(thisFramesWeatherCloudSpawnArg === "Snow"){
        
         widthOfClouds = window.innerWidth/2;
         heightOfClouds = widthOfClouds/4.5;
         averageDistanceBetweenClouds = -heightOfClouds;
         averageStartingHeight = -heightOfClouds/1.5;
-        percipitation = thisFramesWeather;
+        percipitation = thisFramesWeatherCloudSpawnArg;
          percipitationMagnitude = .3;
     
-    }else if(thisFramesWeather === "Thunderstorm"){
+    }else if(thisFramesWeatherCloudSpawnArg === "Thunderstorm"){
        
         widthOfClouds = window.innerWidth/1.5;
         heightOfClouds = widthOfClouds/4;
         averageDistanceBetweenClouds = -heightOfClouds;
         averageStartingHeight = -heightOfClouds/1.5;
-        percipitation = thisFramesWeather;
+        percipitation = thisFramesWeatherCloudSpawnArg;
         adjustedLightingForClouds = -15;
          percipitationMagnitude = .9;
         
@@ -162,7 +170,7 @@ function cloudSpawnUpdate(thisFramesWeather){
     
     
     //console.log("Number of clouds: "+clouds.length );
-    lastFramesWeather = thisFramesWeather;
+    
 
 }
 

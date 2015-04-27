@@ -21,33 +21,75 @@
     <body>
         
         <!-- user input for debugging lighting -->
-        <input type="range" id="sliderTime" value="50"><div id="hour" style="display: inline">0</div>
-        <input type="radio" name="curDebugWeather" id = "curDebugWeatherClear" value="Clear">Clear
-        <input type="radio" name="curDebugWeather" id = "curDebugWeatherClouds" value="Clouds">Clouds
-        <input type="radio" name="curDebugWeather" id = "curDebugWeatherOvercast" value="Overcast">Overcast
-        <input type="radio" name="curDebugWeather" id = "curDebugWeatherFog" value="Fog">Fog
-        <input type="radio" name="curDebugWeather" id = "curDebugWeatherRain" value="Rain">Rain
-        <input type="radio" name="curDebugWeather" id = "curDebugWeatherSnow" value="Snow">Snow
-        <input type="radio" name="curDebugWeather" id = "curDebugWeatherThunderstorm" value="Thunderstorm">Thunderstorm
-        
+        <div id="controls">
+            <input type="range" id="sliderTime" value="50"><div id="hour" style="display: inline">0</div>
+            <input type="radio" name="curDebugWeather" id = "curDebugWeatherClear" value="Clear">Clear
+            <input type="radio" name="curDebugWeather" id = "curDebugWeatherClouds" value="Clouds">Clouds
+            <input type="radio" name="curDebugWeather" id = "curDebugWeatherOvercast" value="Overcast">Overcast
+            <input type="radio" name="curDebugWeather" id = "curDebugWeatherFog" value="Fog">Fog
+            <input type="radio" name="curDebugWeather" id = "curDebugWeatherRain" value="Rain">Rain
+            <input type="radio" name="curDebugWeather" id = "curDebugWeatherSnow" value="Snow">Snow
+            <input type="radio" name="curDebugWeather" id = "curDebugWeatherThunderstorm" value="Thunderstorm">Thunderstorm
+        </div>
         <canvas></canvas>
         
     </body>
         
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src = "https://rawgit.com/noeldelgado/Values.js/master/index.js"></script>
-    <script src="https://rawgit.com/mourner/suncalc/master/suncalc.js"></script>
+    <script src = "https://rawgit.com/noeldelgado/Values.js/master/index.js"></script><!--Shading and Lightening Colors-->
+    <script src="https://rawgit.com/mourner/suncalc/master/suncalc.js"></script><!--A calculator meant to determine sunrise and sunset based on coordinates-->
+    <script src="InputHandler.js"></script>
     <script src="LightCalculator.js"></script>
 	<script src="Objects.js"></script>
     <script src="WeatherGrabber.js"></script>
     <script src="WeatherDrawer.js"></script>
     <script src="ForegroundDrawer.js"></script>
     <script src="BackgroundDrawer.js"></script>
+    <script src="AudioHandler.js"></script>
+    <script src="UI.js"></script>
     
     <script>
         
-        weather = new Weather();
-		var date = new Date();
+        var weather = new Weather();
+        var date = new Date();
+        
+        document.getElementById("controls").style.display = 'none';
+        
+        var debugMode = false;
+        function toggleDebugMode(){
+            debugMode = !debugMode;
+            
+            if(debugMode){
+                //add in debug controls
+                document.getElementById("controls").style.display = "";
+            } else {
+                //removed debug controls
+                document.getElementById("controls").style.display = 'none';
+                tryGrabbingWeatherInfo();
+            }
+        }
+        
+        //used for grabbing user input
+        function debugUpdate(){
+            //changing everything for debugging purposes
+            if(weather != null){
+                if( document.getElementById('curDebugWeatherClear').checked){
+                    weather.caseForRendering = "Clear";
+                } else if ( document.getElementById('curDebugWeatherClouds').checked ){
+                    weather.caseForRendering = "Clouds";
+                } else if ( document.getElementById('curDebugWeatherOvercast').checked ){
+                    weather.caseForRendering = "Overcast";
+                } else if ( document.getElementById('curDebugWeatherFog').checked ){
+                    weather.caseForRendering = "Fog";
+                } else if ( document.getElementById('curDebugWeatherRain').checked ){
+                    weather.caseForRendering = "Rain";
+                 } else if ( document.getElementById('curDebugWeatherSnow').checked ){
+                    weather.caseForRendering = "Snow";
+                } else if (document.getElementById('curDebugWeatherThunderstorm').checked ){
+                    weather.caseForRendering = "Thunderstorm";
+                }
+            }
+        }
         
 		tryGrabbingWeatherInfo();
 		
@@ -59,16 +101,45 @@
 			}
 		}
         
+        function showPosition(position) {   
+            weather = grabWeatherConditions(position.coords.latitude,position.coords.longitude);
+        }
+
+        function showError(error) {
+            var errorString;
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorString = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorString = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    errorString = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorString = "An unknown error occurred.";
+                    break;
+            }
+            console.log(errorString);
+        }
+        
+        
         var canvas = document.querySelector('canvas');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         
         function update(){
-            if(canvas.width != window.innerWidth || canvas.height != window.innerHeight){
+            if(canvas.width !== window.innerWidth || canvas.height !== window.innerHeight){
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
             
+            if(debugMode){
+                debugUpdate();   
+            }
+            
+            updateBackgroundAudio(weather);
             draw();
         }
         
@@ -76,67 +147,23 @@
             drawBackground(canvas,weather);
             drawForeground(canvas,weather);
             drawWeather(canvas,weather);
-			drawWeatherInformation();
+			drawWeatherInformation(weather);
         }
         
 		//consider using onwindowstart or something
         update();
         setInterval ( update, 32 );//~30fps if my math is right
-		setInterval ( tryGrabbingWeatherInfo, 120000 );//attempt grabbing weather conditions every 2 minutes
+		setInterval ( tryGrabbingWeatherInfo, 600000 );//attempt grabbing weather conditions every 10 minutes
         
-        function showPosition(position) {
-            
-            weather = grabWeatherConditions(position.coords.latitude,position.coords.longitude)
-        }
-		
-		
-		function drawWeatherInformation(){
-			
-			date = new Date();
-			
-			ctx.beginPath();
-			ctx.rect(20,canvas.height-120,200,100);
-			ctx.fillStyle = 'Black';
-			ctx.fill();
-			
-			ctx.beginPath();
-			ctx.rect(25,canvas.height-115,190,90);
-			ctx.fillStyle = 'White';
-			ctx.fill();
-			
-			//render text
-			ctx.beginPath();
-			ctx.fillStyle = 'black';
-			ctx.font = "12px Georgia";
-			ctx.fillText(date.getHours()+":"+date.getMinutes(),30,canvas.height-100);
-			ctx.fillText(weather.location,30,canvas.height-85);
-			ctx.fillText(weather.location,30,canvas.height-85);
-			ctx.fillText(weather.inOneWord,30,canvas.height-70);
-			ctx.fillText(weather.curTemp+" F",30,canvas.height-55);
-			ctx.fillText(weather.windSpeed+" mph winds",30,canvas.height-40);
-		}
 
-        function showError(error) {
-            var errorString;
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorString = "User denied the request for Geolocation."
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorString = "Location information is unavailable."
-                    break;
-                case error.TIMEOUT:
-                    errorString = "The request to get user location timed out."
-                    break;
-                case error.UNKNOWN_ERROR:
-                    errorString = "An unknown error occurred."
-                    break;
-            }
-            console.log(errorString);
-        }
+        
+        //handles keyboard input
+        $(document).keypress(function(event){
+            handleUserInput(event);
+        })
     
     </script>
     
     
     
-<html>
+</html>

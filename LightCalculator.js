@@ -10,11 +10,20 @@ function getLighting(weather){
 
     
     var sliderValue = document.getElementById("sliderTime").value;
-    var time = (sliderValue*24)/100;
+    var time = 0;
+    if(debugMode){
+        time = (sliderValue*24)/100;
+    } else {
+        var curTime = new Date();
+        time = curTime.getHours()+(curTime.getMinutes()/60);
+    }
     
     
     // get today's sunlight times for London
     var times = SunCalc.getTimes(new Date(), weather.lat, weather.lon);
+    if(debugMode){
+        times = SunCalc.getTimes(new Date(), 33.524755, -86.812740);
+    }
 
     
     // format sunrise time from the Date object
@@ -23,6 +32,7 @@ function getLighting(weather){
     //console.log(sunriseStr,sunsetStr);
 
     var dayLight = (times.sunsetStart.getHours() + (times.sunsetStart.getMinutes()/100)) - (times.sunriseEnd.getHours()+(times.sunriseEnd.getMinutes()/100))
+    
     
     
     //(time*Math.PI)/12 is above 0 beteen 6 and 18, 12 hours so if you want 12 hours of daylight, divide by 12
@@ -35,8 +45,9 @@ function getLighting(weather){
     //output
     document.getElementById("hour").innerHTML = time+ " daylight: "+dayLight+", time should start:~"+timeToStart;
     
+    currentLighting = Math.min(currentLighting,100)
     //making darker based on weather conditions
-    /*
+    
     if( weather.cascaseForRendering == "Clear" ){
         //let's keep it at 100 I guess
     } else if ( weather.cascaseForRendering == "Clouds" ){
@@ -44,16 +55,18 @@ function getLighting(weather){
     } else if ( weather.cascaseForRendering == "Overcast" ){
         currentLighting -=25;
     } else if ( weather.cascaseForRendering == "Fog" ){
-        currentLighting -= 30;
+        currentLighting -= 35;
     } else if ( weather.cascaseForRendering == "Rain" ){
-        currentLighting -= 40;
+        currentLighting -= 30;
+    } else if ( weather.cascaseForRendering == "Snow" ){
+        currentLighting -= 25;
     } else if ( weather.cascaseForRendering == "Thunderstorm" ){
-        currentLighting -= 50;
+        currentLighting -= 40;
     }
-    */
     
-    currentLighting = Math.min(currentLighting,100)
     
+    
+    /*
     if( document.getElementById('curDebugWeatherClear').checked){
         //let's keep it at 100 I guess
     } else if ( document.getElementById('curDebugWeatherClouds').checked ){
@@ -68,9 +81,9 @@ function getLighting(weather){
         currentLighting -= 25;
     } else if (document.getElementById('curDebugWeatherThunderstorm').checked ){
         currentLighting -= 40;
-    }
+    }*/
     
-    currentLighting = Math.max(currentLighting, 20);
+    currentLighting = Math.max(currentLighting, 20);//making sure it doesn't ever get below 20
     
     return currentLighting;
     

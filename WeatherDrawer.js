@@ -219,6 +219,11 @@ function PercipitationDrop(setXStart, setYStart, setColor){
         return false;
     }
     
+    // splashing
+    this.animateDeath = function() {
+        
+    }
+    
 }
 
 function Cloud(startX, startY, width, height){
